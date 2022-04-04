@@ -1,25 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fileController = require('./controllers/fileController')
-const driverController = require('./controllers/driverController')
 const cors = require('cors');
-
-
-
-////////////////////////////////////////////////////////////////////////////// DB CONNECTION //////////////////////////////////////////////////////////////
-const mongoose = require('mongoose');
-const Connect = async () => {
-    let url = "mongodb+srv://admin:P%40ssword1234@cluster0.zsclg.mongodb.net/NodeJSFile?retryWrites=true&w=majority";
-    try {
-        let client = await mongoose.connect(url);
-        console.log("Database is connected!");
-    } catch (error) {
-        console.log(error.stack);
-        process.exit(1);
-    }
-}
-Connect();
-
 
 
 ////////////////////////////////////////////////////////////////////////////// APP SETUP //////////////////////////////////////////////////////////////
@@ -34,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 const port = process.env.PORT || 3000;
 
 
-////////////////////////////////////////////////////////////////////////////// APP ROUTES CARS //////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////// APP ROUTES FILES //////////////////////////////////////////////////////////////
 
 
 app.get('/files', async function (req, res, next) {
