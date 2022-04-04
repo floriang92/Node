@@ -1,0 +1,15 @@
+.custom-button{
+    background-color: #E76F51;
+    color: #fff;
+    border-radius: 8px;
+    min-height: 50px;
+    min-width: 120px;
+    border: 1px solid #E76F51;
+    box-sizing: border-box;
+    font-family:  'Open Sans';
+    font-style: normal;
+    font-size: 18px;
+    line-height: 25px;
+    text-align: center;
+    margin: 15px 0;
+}

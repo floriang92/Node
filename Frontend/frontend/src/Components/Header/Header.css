@@ -1,0 +1,41 @@
+.header{
+    height:50px;
+    display: flex;
+    align-items: center;
+    background-color: #161B22; 
+    color: white;
+    padding: 16px !important;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.resetCommande{
+   position: absolute;
+   left: 0;
+   margin: 15px 0 0 15px;
+   font-size: 15px !important;
+   min-height: 40px !important;
+}
+.logo{
+height: 40px;
+}
+.Search{
+    height: 20px !important;
+    width: 200px;
+    color: white !important;
+    margin:  0 20px;
+    border: 1px solid #8B949E;
+    border-radius: 6px;
+    background-color :#0D1117;
+}
+ul{
+    padding-left: 0;
+    display: flex;
+    list-style-type: none;
+    color: white !important;
+    font-weight: bold;
+}
+ul>li{
+    margin: 0 5px;
+}
+
+
