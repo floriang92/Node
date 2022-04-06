@@ -34,7 +34,7 @@ const data = [
 export default function FileTable() {
   return (
     <Space style={{width:"70vw"}}>
-      <Table dataSource={data}>
+      <Table dataSource={data} style={{width:"100%"}}>
         <Column title="Logo" dataIndex="logo" key="logo" />
         <Column title="File Name" dataIndex="address" key="address" />
         <Column

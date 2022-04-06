@@ -1,5 +1,7 @@
 import React from "react";
 import Layout from "./Layout";
+import FileTable from "../Components/FileTable/FileTable.jsx";
+import Infos from "../Components/Infos/Infos.jsx";
 import "./HomePage.css";
 function HomePage() {
   return (
@@ -88,6 +90,11 @@ function HomePage() {
         </div>
       </div>
       <hr color="#8B949E"></hr>
+      <div style={{display:"flex"}}>
+      <FileTable />
+      <Infos></Infos>
+      </div>
+      
     </>
   );
 }
