@@ -33,11 +33,14 @@
 .avatar-user {
   border-radius: 50%;
 }
+
 .lineItems {
   height: 35px;
   width: 100%;
-  background-color: #161b22;
-  border: solid 1px #30363d;
+  background-color: #0d1117;
+  border-left: solid 1px #30363d;
+  border-right: solid 1px #30363d;
+  border-bottom: solid 1px #30363d;
   display: flex;
   align-items: center;
   padding: 0 10px;
