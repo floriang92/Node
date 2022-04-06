@@ -1,0 +1,15 @@
+.ant-table-cell {
+    color: white;
+    text-align: left;
+    padding: 10px
+}
+
+.ant-table-wrapper {
+    width: 70%;
+    display: flex;
+    justify-content: right
+}
+table {
+    width:100%
+}
+
