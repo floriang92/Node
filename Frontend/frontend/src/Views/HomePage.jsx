@@ -90,7 +90,7 @@ function HomePage() {
         </div>
       </div>
       <hr color="#8B949E"></hr>
-      <div style={{display:"flex"}}>
+      <div style={{display:"flex", justifyContent: "center"}}>
       <FileTable />
       <Infos></Infos>
       </div>
