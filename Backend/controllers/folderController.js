@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 const fs = require("fs");
+const path = require("path");
 
-function getOneFolder() {
+async function getOneFolder() {
   return fs.readdirSync(__dirname, (err, files) => {
     if (err) {
+      console.log("bla");
       return err;
     } else {
       return files;
@@ -76,8 +78,13 @@ function deleteFolder(id) {
 
 module.exports = {
   GetOneFolder: async () => {
-      console.log(getOneFolder())
-    return getOneFolder();
+    let temp = await getOneFolder();
+    return temp.map((file) => {
+      return {
+        name: file,
+        type: path.extname(file) ? "file" : "directory",
+      };
+    });
   },
 
   GetAllFolders: async () => {
