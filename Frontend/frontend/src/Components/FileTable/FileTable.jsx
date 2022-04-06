@@ -21,7 +21,7 @@ export default function FileTable() {
             response.data.map((file, index) => {
               return (
                 <div className="lineItems" key={index}>
-                  {index === 0 ? (
+                  {file.type !== "file" ? (
                     <svg
                       aria-label="Directory"
                       aria-hidden="true"
@@ -55,7 +55,7 @@ export default function FileTable() {
                       ></path>
                     </svg>
                   )}
-                  <p>{file}</p>
+                  <p>{file.name}</p>
                 </div>
               );
             })
