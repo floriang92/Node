@@ -27,16 +27,14 @@ function getAllFolders() {
   });
 }
 
-function createFolder(data) {
-  return new Promise((resolve, reject) => {
-    mongoose.model("Folder").create(data, function (err, folder) {
-      if (err) {
-        console.log(err);
-        reject("Can't add folder in DataBase, add Immatriculation field");
-      } else {
-        resolve(folder);
-      }
-    });
+async function createFolder(completePath) {
+  fs.mkdirSync(completePath, (err) => {
+    if (err) {
+      return err;
+    } else {
+      console.log("The folder has been created!");
+      return "File created";
+    }
   });
 }
 
@@ -92,8 +90,7 @@ module.exports = {
   },
 
   AddFolder: async (data) => {
-    let addedFolder = await createFolder(data);
-    return addedFolder;
+    return createFolder(data.data.address + "/" + data.data.name);
   },
 
   UpdateFolder: async (id, data) => {

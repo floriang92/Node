@@ -55,6 +55,18 @@ app.post("/addFile", async function (req, res, next) {
   res.json(addedFile);
 });
 
+app.post("/addFolder", async function (req, res, next) {
+  let addedFolder = await folderController
+    .AddFolder(req.body)
+    .then((result) => {
+      return result;
+    })
+    .catch((error) => {
+      return error;
+    });
+  res.json(addedFolder);
+});
+
 app.put("/file/:id", async function (req, res, next) {
   let updatedFile = await fileController
     .UpdateFile(req.params.id, req.body)

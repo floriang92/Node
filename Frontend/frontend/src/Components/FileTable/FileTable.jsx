@@ -44,6 +44,7 @@ export default function FileTable() {
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
+  const [fileContent, setFileContent] = React.useState(null);
 
   const classes = useStyles();
 
@@ -75,18 +76,15 @@ export default function FileTable() {
     <div style={modalStyle} className={classes.paper}>
       <h2 id="simple-modal-title">Ajouter un fichier</h2>
       <p id="simple-modal-description">
-        L'emplacement est par défaut set à l'endroit où vous vous situez.
-        <strong> Pensez à rajouter l'extension du fichier ! </strong>
+        L'emplacement est par défaut à l'endroit où vous vous situez.
+        <strong> Pensez à rajouter l'extension du fichier, sinon il sera considéré comme un dossier ! </strong>
       </p>
-      <FormAddFile />
+      <FormAddFile handleClose={handleClose} />
     </div>
   );
   const body2 = (
     <div style={modalStyle} className={classes.paper}>
-      <h2 id="simple-modal-title">Ajouter un fichier</h2>
-      <p id="simple-modal-description">
-        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-      </p>
+      {fileContent?.join(" WOW ")}
     </div>
   );
   const body3 = (
@@ -104,13 +102,10 @@ export default function FileTable() {
         .post(baseUrl + "/folderDetail", { path: pathState.path })
         .then(function (response) {
           // handle success
-          console.log(response.data);
           setRefreshComponent(true);
           setUrl(pathState.path);
           setLineItems(
             response.data.map((file, index) => {
-              console.log(file.name);
-
               return (
                 <div
                   className={
@@ -122,10 +117,19 @@ export default function FileTable() {
                   <p
                     className={file.type !== "file" ? "file-text" : ""}
                     onClick={(e) => {
-                      pathDispatch({
-                        type: "deeperPath",
-                        payload: e.target.innerText,
-                      });
+                      if (file.type === "file") {
+                        axios
+                          .post(baseUrl + "/fileContent", {
+                            path: pathState.path + "/" + file.name,
+                          })
+                          .then((res) => setFileContent(res.data))
+                          .catch((err) => console.log(err));
+                      } else {
+                        pathDispatch({
+                          type: "deeperPath",
+                          payload: e.target.innerText,
+                        });
+                      }
                     }}
                   >
                     {file.name}
@@ -207,10 +211,12 @@ export default function FileTable() {
           <div className="right-part">
             <div
               className="containerArrow"
-              onClick={(e) => {
-                pathDispatch({
-                  type: "higherPath",
-                });
+              onClick={() => {
+                if (pathState.path !== "data") {
+                  pathDispatch({
+                    type: "higherPath",
+                  });
+                }
               }}
             >
               {BackArrow} Previous Page

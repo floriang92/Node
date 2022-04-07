@@ -4,16 +4,21 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { baseUrl } from "../../Environnement";
+import { Path } from "react-router-dom";
 
-function FormAddFile() {
+function FormAddFile(props) {
   const { pathState } = React.useContext(PathContext);
   const [addFileHandler, setAddFileHandler] = React.useState({
     address: pathState.path,
     name: "test.js",
   });
   const handleSubmit1 = () => {
+    let url;
+    let re = /(?:\.([^.]+))?$/;
+    re.exec(addFileHandler.name)[1] ? (url = "/addFile") : (url = "/addFolder");
+
     axios
-      .post(baseUrl + "/addFile", { data: addFileHandler })
+      .post(baseUrl + url, { data: addFileHandler })
       .then(function (response) {
         console.log(response.data);
       })
@@ -37,6 +42,8 @@ function FormAddFile() {
       onSubmit={(e) => {
         e.preventDefault();
         handleSubmit1();
+        props.handleClose();
+        window.location.reload();
       }}
     >
       <div className="text-field">
@@ -66,8 +73,8 @@ function FormAddFile() {
           className="text-field"
           required
           id="outlined-required"
-          label="Nom Fichier avec extension"
-          defaultValue="test.js"
+          label="Nom Fichier / Dossier"
+          value={addFileHandler.name}
           variant="outlined"
         />
       </div>
