@@ -9,6 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import FormAddFile from "../Form/FormAddFile";
 import FormDelete from "../Form/FormDelete";
+import FileDisplay from "../FileDisplay/FileDisplay";
 
 function getModalStyle() {
   const top = 50;
@@ -150,10 +151,12 @@ export default function FileTable() {
                         <div style={modalStyle} className={classes.paper}>
                           <h2 id="simple-modal-title">Ajouter un fichier</h2>
                           <p id="simple-modal-description">
-                            Voulez-vous vraiment supprimer ce {file.type === "file" ? "fichier" : "dossier"} ?
+                            Voulez-vous vraiment supprimer ce{" "}
+                            {file.type === "file" ? "fichier" : "dossier"} ?
                             <strong>
                               {" "}
-                              S'il s'agit d'un dossier, la suppression sera récursive{" "}
+                              S'il s'agit d'un dossier, la suppression sera
+                              récursive{" "}
                             </strong>
                           </p>
                           <FormDelete
@@ -261,6 +264,7 @@ export default function FileTable() {
                     type: "higherPath",
                   });
                 }
+                setFileContent(null)
               }}
             >
               {BackArrow} Previous Page
@@ -268,6 +272,9 @@ export default function FileTable() {
           </div>
         </div>
         <div className="container-items">{lineItems}</div>
+        {fileContent ? (
+          <FileDisplay lines={fileContent}/>
+        ) : null}
       </div>
     </Space>
   );

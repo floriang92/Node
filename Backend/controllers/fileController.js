@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 async function getOneFile(completePath) {
-  return fs.readFileSync(completePath, (err, file) => {
+  return fs.readFileSync(completePath, "UTF-8", (err, file) => {
     if (err) {
       return err;
     } else {
