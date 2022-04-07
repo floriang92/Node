@@ -89,6 +89,18 @@ app.delete("/deleteFile", async function (req, res, next) {
     });
 });
 
+app.post("/moveFile", async function (req, res, next) {
+  let oneFile = await fileController
+    .MoveOneFile(req.body.oldPath, req.body.newPath)
+    .then((result) => {
+      return result;
+    })
+    .catch((error) => {
+      return error;
+    });
+  res.json(oneFile);
+});
+
 app.listen(port, () => {
   console.log("Server app listening on port " + port);
 });

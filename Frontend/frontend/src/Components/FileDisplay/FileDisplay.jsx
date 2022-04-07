@@ -4,12 +4,13 @@ import "./FileDisplay.css";
 function FileDisplay(props) {
   return (
     <div className="container-fileContent">
-      {props.lines.map((line, index) => {
+      <h1 style={{ color: "#c9d1d9" }}>{props.lines.name}</h1>
+      {props.lines.lines.map((line, index) => {
         if (line !== "") {
           return <p>{line}</p>;
         }
       })}
-      <i style={{color: "#c9d1d9"}}>End of document</i>;
+      <i style={{ color: "#c9d1d9" }}>End of document</i>;
     </div>
   );
 }

@@ -32,6 +32,16 @@ async function deleteFile(completePath) {
   }
 }
 
+async function moveOneFile(oldpath, newPath) {
+  try {
+    fs.renameSync(oldpath, newPath);
+    return "file moved successfully";
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
+}
+
 module.exports = {
   GetOneFile: async (completePath) => {
     let temp = [];
@@ -49,8 +59,8 @@ module.exports = {
     return createFile(data.data.address + "/" + data.data.name);
   },
 
-  UpdateFile: async (id, data) => {
-    let updatedFile = await updateFile(id, data);
+  MoveOneFile: async (oldPath, newPath) => {
+    let updatedFile = await moveOneFile(oldPath, newPath);
     return updatedFile;
   },
 

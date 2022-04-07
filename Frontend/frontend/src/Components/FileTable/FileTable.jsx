@@ -1,6 +1,6 @@
 import React from "react";
 import "./FileTable.css";
-import { Table, Tag, Space } from "antd";
+import { Space } from "antd";
 import axios from "axios";
 import { baseUrl } from "../../Environnement";
 import { DirectoryIcon, FileIcon, BackArrow } from "../Svg";
@@ -48,7 +48,10 @@ export default function FileTable() {
   const [openDelete, setOpenDelete] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
-  const [fileContent, setFileContent] = React.useState(null);
+  const [fileContent, setFileContent] = React.useState({
+    name: "",
+    lines: null,
+  });
 
   const classes = useStyles();
   const handleOpen = () => {
@@ -97,9 +100,7 @@ export default function FileTable() {
     </div>
   );
   const body2 = (
-    <div style={modalStyle} className={classes.paper}>
-      {fileContent?.join(" WOW ")}
-    </div>
+    <div></div>
   );
 
   React.useEffect(() => {
@@ -121,14 +122,19 @@ export default function FileTable() {
                 >
                   {file.type !== "file" ? DirectoryIcon : FileIcon}
                   <p
-                    className={file.type !== "file" ? "file-text" : ""}
+                    className="file-text"
                     onClick={(e) => {
                       if (file.type === "file") {
                         axios
                           .post(baseUrl + "/fileContent", {
                             path: pathState.path + "/" + file.name,
                           })
-                          .then((res) => setFileContent(res.data))
+                          .then((res) =>
+                            setFileContent({
+                              name: pathState.path + "/" + file.name,
+                              lines: res.data,
+                            })
+                          )
                           .catch((err) => console.log(err));
                       } else {
                         pathDispatch({
@@ -264,7 +270,7 @@ export default function FileTable() {
                     type: "higherPath",
                   });
                 }
-                setFileContent(null)
+                setFileContent({ name: "", lines: null });
               }}
             >
               {BackArrow} Previous Page
@@ -272,9 +278,7 @@ export default function FileTable() {
           </div>
         </div>
         <div className="container-items">{lineItems}</div>
-        {fileContent ? (
-          <FileDisplay lines={fileContent}/>
-        ) : null}
+        {fileContent.lines ? <FileDisplay lines={fileContent} /> : null}
       </div>
     </Space>
   );
