@@ -7,6 +7,7 @@ import { DirectoryIcon, FileIcon, BackArrow } from "../Svg";
 import { PathContext } from "../../Contexts/PathContext";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
+import TextField from "@material-ui/core/TextField";
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -32,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  "& .MuiTextField-root": {
+    margin: theme.spacing(1),
+    width: "25ch",
+  },
 }));
 
 export default function FileTable() {
@@ -44,6 +49,12 @@ export default function FileTable() {
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
+
+  const [addFileHandler, setAddFileHandler] = React.useState({
+    address: pathState.path,
+    name: "",
+  });
+
   const classes = useStyles();
 
   const handleOpen = () => {
@@ -70,12 +81,54 @@ export default function FileTable() {
     setOpen3(false);
   };
 
+  const handleSubmit1 = () => {
+    console.log(addFileHandler);
+  };
+
   const body1 = (
     <div style={modalStyle} className={classes.paper}>
       <h2 id="simple-modal-title">Ajouter un fichier</h2>
       <p id="simple-modal-description">
-        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+        L'emplacement est par défaut set à l'endroit où vous vous situez.
+        <strong> Pensez à rajouter l'extension du fichier ! </strong>
       </p>
+      <form onSubmit={handleSubmit1}>
+        <div className="text-field">
+          <TextField
+            onChange={(e) => {
+              setAddFileHandler({
+                ...addFileHandler,
+                address: e.target.value,
+              });
+            }}
+            className="text-field"
+            required
+            id="outlined-required"
+            label="Emplacement"
+            variant="outlined"
+            value={addFileHandler.address}
+          />
+        </div>
+        <div className="text-field">
+          <TextField
+            onChange={(e) => {
+              setAddFileHandler({
+                ...addFileHandler,
+                name: e.target.value,
+              });
+            }}
+            className="text-field"
+            required
+            id="outlined-required"
+            label="Nom Fichier avec extension"
+            defaultValue="test.js"
+            variant="outlined"
+          />
+        </div>
+        <button className="button-modal" type="submit">
+          Créer un fichier
+        </button>
+      </form>
     </div>
   );
   const body2 = (
@@ -149,7 +202,7 @@ export default function FileTable() {
       <div className="container-global">
         <div className="container-button-modal">
           <div className="ajouter-ficher">
-            <button className="button-modal" onClick={handleOpen}>
+            <button className="button-modal-ajouter" onClick={handleOpen}>
               Ajouter un ficher
             </button>
             <Modal

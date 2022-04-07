@@ -88,10 +88,10 @@
 }
 
 .button-modal{
-  background-color: #161B22 !important;
-  color: #fff;
+  background-color: #21262d !important;
+  color: #c9d1d9;
   border-radius: 8px;
-  border: 1px solid #8B949E;
+  border: 1px solid rgba(240,246,252,0.1);
   box-sizing: border-box;
   font-family:  'Open Sans';
   font-style: normal;
@@ -106,4 +106,40 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.button-modal:hover{
+  background-color: #30363d !important;
+  border: 1px solid #8b949e;
+  cursor: pointer;
+}
+
+.button-modal-ajouter{
+  background-color: #238636;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family:  'Open Sans';
+  font-style: normal;
+  text-align: center;
+  margin: 15px 5px ;
+  padding: 3px 12px;
+  font-size: 12px;
+  line-height: 20px;
+  width:auto;
+  min-height:35px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-modal-ajouter:hover{
+  background-color: #2ea043;
+  cursor: pointer;
+  border: none;
+}
+.text-field{
+  margin: 15px 0;
+  width: 250px;
 }
