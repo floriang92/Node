@@ -33,6 +33,7 @@ ul{
     list-style-type: none;
     color: white !important;
     font-weight: bold;
+    width:100%;
 }
 ul>li{
     margin: 0 5px;

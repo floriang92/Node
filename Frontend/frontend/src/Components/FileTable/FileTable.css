@@ -78,4 +78,32 @@
   text-decoration:underline;
   cursor: pointer;
 }
+.container-button-modal{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.ajouter-ficher{
+  margin: 5px;
+}
 
+.button-modal{
+  background-color: #161B22 !important;
+  color: #fff;
+  border-radius: 8px;
+  border: 1px solid #8B949E;
+  box-sizing: border-box;
+  font-family:  'Open Sans';
+  font-style: normal;
+  text-align: center;
+  margin: 15px 5px ;
+  padding: 3px 12px;
+  font-size: 12px;
+  line-height: 20px;
+  width:auto;
+  min-height:35px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
