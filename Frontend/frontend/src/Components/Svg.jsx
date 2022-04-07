@@ -35,4 +35,19 @@ const FileIcon = (
   </svg>
 );
 
-export { DirectoryIcon, FileIcon };
+const BackArrow = (
+  <svg
+    viewBox="0 0 24 24"
+    focusable="false"
+    width="35"
+    height="35"
+    transform="rotate(180)"
+  >
+    <path
+      fill="#fff"
+      d="M8.59,16.59L13.17,12L8.59,7.41L10,6l6,6l-6,6L8.59,16.59z"
+    ></path>
+  </svg>
+);
+
+export { DirectoryIcon, FileIcon, BackArrow };

@@ -3,7 +3,7 @@ import "./FileTable.css";
 import { Table, Tag, Space } from "antd";
 import axios from "axios";
 import { baseUrl } from "../../Environnement";
-import { DirectoryIcon, FileIcon } from "../Svg";
+import { DirectoryIcon, FileIcon, BackArrow } from "../Svg";
 import { PathContext } from "../../Contexts/PathContext";
 
 export default function FileTable() {
@@ -11,6 +11,7 @@ export default function FileTable() {
   const [refreshComponent, setRefreshComponent] = React.useState(true);
   const [dataUsers, setDataUsers] = React.useState(null);
   const { pathState, pathDispatch } = React.useContext(PathContext);
+  const [url, setUrl] = React.useState(null);
 
   React.useEffect(() => {
     const callApi = () => {
@@ -20,25 +21,31 @@ export default function FileTable() {
           // handle success
           console.log(response.data);
           setRefreshComponent(true);
+          setUrl(pathState.path);
           setLineItems(
             response.data.map((file, index) => {
               console.log(file.name);
-              
+
               return (
-                <div className={ file.type !== "file" ? "lineItems file" : "lineItems"} key={index} >
-                    {file.type !== "file" ? DirectoryIcon : FileIcon}
-                    <p 
-                      className={ file.type !== "file" ? "file-text" : ""}
-                      onClick={(e) => {
-                        pathDispatch({
-                          type: "deeperPath",
-                          payload: e.target.innerText,
-                        });
-                      }}
-                    >
-                      {file.name}
-                    </p>
-                  </div>
+                <div
+                  className={
+                    file.type !== "file" ? "lineItems file" : "lineItems"
+                  }
+                  key={index}
+                >
+                  {file.type !== "file" ? DirectoryIcon : FileIcon}
+                  <p
+                    className={file.type !== "file" ? "file-text" : ""}
+                    onClick={(e) => {
+                      pathDispatch({
+                        type: "deeperPath",
+                        payload: e.target.innerText,
+                      });
+                    }}
+                  >
+                    {file.name}
+                  </p>
+                </div>
               );
             })
           );
@@ -68,8 +75,20 @@ export default function FileTable() {
               alt="@Willix-IT"
               class="avatar-user"
             />
-            <h3 class="user-title">Willix-IT </h3>
-            <p class="url">Animation Slide / rotate</p>
+            <h3 class="user-title">Deepyjr </h3>
+            <p class="url">{url}</p>
+          </div>
+          <div className="right-part">
+            <div
+              className="containerArrow"
+              onClick={(e) => {
+                pathDispatch({
+                  type: "higherPath",
+                });
+              }}
+            >
+              {BackArrow} Previous Page
+            </div>
           </div>
         </div>
         <div className="container-items">{lineItems}</div>
