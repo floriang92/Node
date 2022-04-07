@@ -43,7 +43,7 @@ app.post("/fileContent", async function (req, res, next) {
   res.json(oneFile);
 });
 
-app.post("/file", async function (req, res, next) {
+app.post("/addFile", async function (req, res, next) {
   let addedFile = await fileController
     .AddFile(req.body)
     .then((result) => {

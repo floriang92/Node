@@ -12,12 +12,13 @@ async function getOneFile(completePath) {
   });
 }
 
-function createFile(completePath, content) {
-  fs.writeFileSync(data.path, data.content, (err) => {
+async function createFile(completePath) {
+  fs.writeFileSync(completePath, "", (err) => {
     if (err) {
-      console.log(err);
+      return err;
     } else {
       console.log("The file has been created!");
+      return "File created";
     }
   });
 }
@@ -69,8 +70,7 @@ module.exports = {
   },
 
   AddFile: async (data) => {
-    let addedFile = await createFile(data);
-    return addedFile;
+    return createFile(data.data.address + "/" + data.data.name);
   },
 
   UpdateFile: async (id, data) => {
