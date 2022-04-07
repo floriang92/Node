@@ -1,102 +1,105 @@
-const mongoose = require('mongoose');
-const File = require('../models/file')
+const mongoose = require("mongoose");
+const fs = require("fs");
+const path = require("path");
 
+async function getOneFile(completePath) {
+  return fs.readFileSync(completePath, (err, file) => {
+    if (err) {
+      return err;
+    } else {
+      return file;
+    }
+  });
+}
 
-function getOneFile(id) {
-    return new Promise((resolve, reject) => {
-      mongoose.model('File').findOne({ _id: id })
-        .exec(function (err, file) {
+function getAllFiles() {
+  return new Promise((resolve, reject) => {
+    mongoose
+      .model("File")
+      .find({})
+      .exec(function (err, files) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(files);
+        }
+      });
+  });
+}
+
+function createFile(data) {
+  return new Promise((resolve, reject) => {
+    mongoose.model("File").create(data, function (err, file) {
+      if (err) {
+        console.log(err);
+        reject("Can't add file in DataBase, add Immatriculation field");
+      } else {
+        resolve(file);
+      }
+    });
+  });
+}
+
+function updateFile(id, data) {
+  return new Promise((resolve, reject) => {
+    mongoose
+      .model("File")
+      .findOneAndUpdate(
+        { _id: id },
+        data,
+        { returnOriginal: false },
+        function (err, file) {
           if (err) {
-            res.json({
-              error: 1,
-              message: "Can't get by id",
-            });
+            console.log(err);
+            reject("Can't update file");
           } else {
             resolve(file);
           }
-        });
-    })
-  }
+        }
+      );
+  });
+}
 
-function getAllFiles() {
-    return new Promise((resolve, reject) => {
-      mongoose.model('File').find({})
-        .exec(function (err, files) {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(files);
-          };
-        });
+function deleteFile(id) {
+  return new Promise((resolve, reject) => {
+    mongoose.model("File").findOneAndDelete({ _id: id }, function (err, file) {
+      if (err) {
+        console.log(err);
+        reject("Can't delete file");
+      } else {
+        resolve("File delete OK");
+      }
     });
-  }
-
-
-  function createFile(data) {
-    return new Promise((resolve, reject) => {
-      mongoose.model('File').create(data, function (err, file) {
-        if (err) {
-          console.log(err);
-          reject("Can't add file in DataBase, add Immatriculation field");
-        }
-        else {
-          resolve(file)
-        }
-      });
-  
-    });
-  }
-
-  function updateFile(id, data) {
-    return new Promise((resolve, reject) => {
-      mongoose.model('File').findOneAndUpdate({ _id: id }, data, { returnOriginal: false }, function (err, file) {
-        if (err) {
-          console.log(err);
-          reject("Can't update file");
-        } else {
-          resolve(file);
-        }
-      });
-    })
-  }
-
-  function deleteFile(id) {
-    return new Promise((resolve, reject) => {
-      mongoose.model('File').findOneAndDelete({ _id: id }, function (err, file) {
-        if (err) {
-          console.log(err);
-          reject("Can't delete file");
-        } else {
-          resolve("File delete OK");
-        }
-      });
-    })
-  }
+  });
+}
 
 module.exports = {
+  GetOneFile: async (completePath) => {
+    let temp = []
+    let oneFile = await getOneFile(completePath);
+    oneFile.toString().split(/\r?\n/).forEach(line =>  {
+      temp.push(line);
+    });
+    return temp;
+  },
 
-    GetOneFile: async(id) => {
-        let oneFile = await getOneFile(id)
-        return oneFile
-    },
+  GetAllFiles: async () => {
+    let allFiles = await getAllFiles();
+    return allFiles;
+  },
 
-    GetAllFiles: async() => {
-        let allFiles = await getAllFiles()
-        return allFiles
-    },
+  AddFile: async (data) => {
+    let addedFile = await createFile(data);
+    return addedFile;
+  },
 
-    AddFile: async(data) => {
-        let addedFile = await createFile(data)
-        return addedFile
-    },
+  UpdateFile: async (id, data) => {
+    let updatedFile = await updateFile(id, data);
+    return updatedFile;
+  },
 
-    UpdateFile: async(id, data) => {
-      let updatedFile = await updateFile(id, data) 
-      return updatedFile
-    },
-
-    DeleteFile: async(id) => {
-      let deletedFile = await deleteFile(id)
-      return deletedFile
-    }
-  }
+  DeleteFile: async (id) => {
+    let deletedFile = await deleteFile(id);
+    return deletedFile;
+  },
+};
