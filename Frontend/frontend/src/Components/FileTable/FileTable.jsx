@@ -23,20 +23,22 @@ export default function FileTable() {
           setLineItems(
             response.data.map((file, index) => {
               console.log(file.name);
+              
               return (
-                <div className="lineItems" key={index}>
-                  {file.type !== "file" ? DirectoryIcon : FileIcon}
-                  <p
-                    onClick={(e) => {
-                      pathDispatch({
-                        type: "deeperPath",
-                        payload: e.target.innerText,
-                      });
-                    }}
-                  >
-                    {file.name}
-                  </p>
-                </div>
+                <div className={ file.type !== "file" ? "lineItems file" : "lineItems"} key={index} >
+                    {file.type !== "file" ? DirectoryIcon : FileIcon}
+                    <p 
+                      className={ file.type !== "file" ? "file-text" : ""}
+                      onClick={(e) => {
+                        pathDispatch({
+                          type: "deeperPath",
+                          payload: e.target.innerText,
+                        });
+                      }}
+                    >
+                      {file.name}
+                    </p>
+                  </div>
               );
             })
           );

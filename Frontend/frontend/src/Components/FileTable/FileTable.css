@@ -52,3 +52,13 @@
     flex-direction: column;
   }
 
+.file:hover{
+  background-color: #161B22;
+
+}
+.file-text:hover{
+  color: #58A6FF !important;
+  text-decoration:underline;
+  cursor: pointer;
+}
+
