@@ -12,31 +12,13 @@ async function getOneFile(completePath) {
   });
 }
 
-function getAllFiles() {
-  return new Promise((resolve, reject) => {
-    mongoose
-      .model("File")
-      .find({})
-      .exec(function (err, files) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(files);
-        }
-      });
-  });
-}
-
-function createFile(data) {
-  return new Promise((resolve, reject) => {
-    mongoose.model("File").create(data, function (err, file) {
-      if (err) {
-        console.log(err);
-        reject("Can't add file in DataBase, add Immatriculation field");
-      } else {
-        resolve(file);
-      }
-    });
+function createFile(completePath, content) {
+  fs.writeFileSync(data.path, data.content, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("The file has been created!");
+    }
   });
 }
 
@@ -75,17 +57,15 @@ function deleteFile(id) {
 
 module.exports = {
   GetOneFile: async (completePath) => {
-    let temp = []
+    let temp = [];
     let oneFile = await getOneFile(completePath);
-    oneFile.toString().split(/\r?\n/).forEach(line =>  {
-      temp.push(line);
-    });
+    oneFile
+      .toString()
+      .split(/\r?\n/)
+      .forEach((line) => {
+        temp.push(line);
+      });
     return temp;
-  },
-
-  GetAllFiles: async () => {
-    let allFiles = await getAllFiles();
-    return allFiles;
   },
 
   AddFile: async (data) => {
