@@ -5,103 +5,22 @@ import axios from "axios";
 import { baseUrl } from "../../Environnement";
 import { DirectoryIcon, FileIcon, BackArrow } from "../Svg";
 import { PathContext } from "../../Contexts/PathContext";
-import { makeStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Modal";
-import FormAddFile from "../Form/FormAddFile";
-import FormDelete from "../Form/FormDelete";
 import FileDisplay from "../FileDisplay/FileDisplay";
-
-function getModalStyle() {
-  const top = 50;
-  const left = 50;
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    position: "absolute",
-    width: 400,
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-  "& .MuiTextField-root": {
-    margin: theme.spacing(1),
-    width: "25ch",
-  },
-}));
+import ModalDelete from "../Modal/ModalDelete";
+import ModalCreate from "../Modal/ModalCreate";
+import ModalMove from "../Modal/ModalMove";
+import ModalCommand from "../Modal/ModalCommand";
 
 export default function FileTable() {
   const [lineItems, setLineItems] = React.useState();
   const [refreshComponent, setRefreshComponent] = React.useState(true);
   const { pathState, pathDispatch } = React.useContext(PathContext);
   const [url, setUrl] = React.useState(null);
-  const [modalStyle] = React.useState(getModalStyle);
-  const [bodyDelete, setBodyDelete] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
-  const [openDelete, setOpenDelete] = React.useState(false);
-  const [open2, setOpen2] = React.useState(false);
-  const [open3, setOpen3] = React.useState(false);
+  const [modalToDisplay, setModalToDisplay] = React.useState(null);
   const [fileContent, setFileContent] = React.useState({
     name: "",
     lines: null,
   });
-
-  const classes = useStyles();
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleOpenDelete = () => {
-    setOpenDelete(true);
-  };
-
-  const handleCloseDelete = () => {
-    setOpenDelete(false);
-  };
-
-  const handleOpen2 = () => {
-    setOpen2(true);
-  };
-
-  const handleClose2 = () => {
-    setOpen2(false);
-  };
-
-  const handleOpen3 = () => {
-    setOpen3(true);
-  };
-
-  const handleClose3 = () => {
-    setOpen3(false);
-  };
-
-  const body1 = (
-    <div style={modalStyle} className={classes.paper}>
-      <h2 id="simple-modal-title">Ajouter un fichier</h2>
-      <p id="simple-modal-description">
-        L'emplacement est par défaut à l'endroit où vous vous situez.
-        <strong>
-          {" "}
-          Pensez à rajouter l'extension du fichier, sinon il sera considéré
-          comme un dossier !{" "}
-        </strong>
-      </p>
-      <FormAddFile handleClose={handleClose} />
-    </div>
-  );
-  const body2 = (
-    <div></div>
-  );
 
   React.useEffect(() => {
     const callApi = () => {
@@ -153,25 +72,9 @@ export default function FileTable() {
                     viewBox="0 0 24 24"
                     className="delete-svg"
                     onClick={() => {
-                      setBodyDelete(
-                        <div style={modalStyle} className={classes.paper}>
-                          <h2 id="simple-modal-title">Ajouter un fichier</h2>
-                          <p id="simple-modal-description">
-                            Voulez-vous vraiment supprimer ce{" "}
-                            {file.type === "file" ? "fichier" : "dossier"} ?
-                            <strong>
-                              {" "}
-                              S'il s'agit d'un dossier, la suppression sera
-                              récursive{" "}
-                            </strong>
-                          </p>
-                          <FormDelete
-                            name={file.name}
-                            handleClose={handleClose}
-                          />
-                        </div>
+                      setModalToDisplay(
+                        <ModalDelete file={file} reset={setModalToDisplay} />
                       );
-                      handleOpenDelete();
                     }}
                   >
                     <path
@@ -201,53 +104,37 @@ export default function FileTable() {
       <div className="container-global">
         <div className="container-button-modal">
           <div className="ajouter-ficher">
-            <button className="button-modal-ajouter" onClick={handleOpen}>
+            <button
+              className="button-modal-ajouter"
+              onClick={() =>
+                setModalToDisplay(<ModalCreate reset={setModalToDisplay} />)
+              }
+            >
               Ajouter un ficher
             </button>
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="simple-modal-title"
-              aria-describedby="simple-modal-description"
-            >
-              {body1}
-            </Modal>
           </div>
           <div className="ajouter-ficher">
-            <button className="button-modal" onClick={handleOpen2}>
+            <button
+              className="button-modal"
+              onClick={() => {
+                setModalToDisplay(<ModalMove reset={setModalToDisplay} />);
+              }}
+            >
               Déplacer un ficher
             </button>
-            <Modal
-              open={open2}
-              onClose={handleClose2}
-              aria-labelledby="simple-modal-title"
-              aria-describedby="simple-modal-description"
-            >
-              {body2}
-            </Modal>
           </div>
           <div className="ajouter-ficher">
-            <button className="button-modal" onClick={handleOpen3}>
+            <button
+              className="button-modal"
+              onClick={() => {
+                setModalToDisplay(<ModalCommand reset={setModalToDisplay} />);
+              }}
+            >
               Exécuter une commande Shell
             </button>
-            <Modal
-              open={open3}
-              onClose={handleClose3}
-              aria-labelledby="simple-modal-title"
-              aria-describedby="simple-modal-description"
-            >
-              {body2}
-            </Modal>
           </div>
         </div>
-        <Modal
-          open={openDelete}
-          onClose={handleCloseDelete}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-        >
-          {bodyDelete}
-        </Modal>
+        {modalToDisplay}
         <div className="container-header">
           <div className="left-part-icon-url">
             <img
