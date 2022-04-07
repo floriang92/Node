@@ -18,7 +18,8 @@ const port = process.env.PORT || 3000;
 
 ////////////////////////////////////////////////////////////////////////////// APP ROUTES FILES //////////////////////////////////////////////////////////////
 
-app.get("/folderDetail", async function (req, res, next) {
+app.post("/folderDetail", async function (req, res, next) {
+  console.log(req.body.path)
   let oneFolder = await folderController
     .GetOneFolder(req.body.path)
     .then((result) => {

@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { PathProvider } from './Contexts/PathContext';
 
 ReactDOM.render(
   <React.StrictMode>
+    <PathProvider>
     <App />
+    </PathProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
