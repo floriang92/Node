@@ -23,37 +23,13 @@ async function createFile(completePath) {
   });
 }
 
-function updateFile(id, data) {
-  return new Promise((resolve, reject) => {
-    mongoose
-      .model("File")
-      .findOneAndUpdate(
-        { _id: id },
-        data,
-        { returnOriginal: false },
-        function (err, file) {
-          if (err) {
-            console.log(err);
-            reject("Can't update file");
-          } else {
-            resolve(file);
-          }
-        }
-      );
-  });
-}
-
-function deleteFile(id) {
-  return new Promise((resolve, reject) => {
-    mongoose.model("File").findOneAndDelete({ _id: id }, function (err, file) {
-      if (err) {
-        console.log(err);
-        reject("Can't delete file");
-      } else {
-        resolve("File delete OK");
-      }
-    });
-  });
+async function deleteFile(completePath) {
+  try {
+    fs.unlinkSync(completePath);
+    //file removed
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 module.exports = {
@@ -78,8 +54,7 @@ module.exports = {
     return updatedFile;
   },
 
-  DeleteFile: async (id) => {
-    let deletedFile = await deleteFile(id);
-    return deletedFile;
+  DeleteFile: async (data) => {
+    return deleteFile(data);
   },
 };

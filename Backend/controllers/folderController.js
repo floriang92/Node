@@ -58,19 +58,12 @@ function updateFolder(id, data) {
   });
 }
 
-function deleteFolder(id) {
-  return new Promise((resolve, reject) => {
-    mongoose
-      .model("Folder")
-      .findOneAndDelete({ _id: id }, function (err, folder) {
-        if (err) {
-          console.log(err);
-          reject("Can't delete folder");
-        } else {
-          resolve("Folder delete OK");
-        }
-      });
-  });
+async function deleteFolder(completePath) {
+  try {
+    fs.rmSync(completePath, { recursive: true, force: true });
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 module.exports = {
@@ -98,8 +91,8 @@ module.exports = {
     return updatedFolder;
   },
 
-  DeleteFolder: async (id) => {
-    let deletedFolder = await deleteFolder(id);
-    return deletedFolder;
+  DeleteFolder: async (data) => {
+    console.log(data)
+    return deleteFolder(data);
   },
 };

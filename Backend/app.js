@@ -67,21 +67,21 @@ app.post("/addFolder", async function (req, res, next) {
   res.json(addedFolder);
 });
 
-app.put("/file/:id", async function (req, res, next) {
-  let updatedFile = await fileController
-    .UpdateFile(req.params.id, req.body)
-    .then((result) => {
-      res.status(200).send("Update OK");
+app.delete("/deleteFolder", async function (req, res, next) {
+  await folderController
+    .DeleteFolder(req.body.path)
+    .then(() => {
+      res.status(200).send("Deletion OK");
     })
     .catch((error) => {
       res.status(400).send(error);
     });
 });
 
-app.delete("/file/:id", async function (req, res, next) {
-  let deletedFile = await fileController
-    .DeleteFile(req.params.id)
-    .then((result) => {
+app.delete("/deleteFile", async function (req, res, next) {
+  await fileController
+    .DeleteFile(req.body.path)
+    .then(() => {
       res.status(200).send("Deletion OK");
     })
     .catch((error) => {
