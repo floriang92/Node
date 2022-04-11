@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const fileController = require("./controllers/fileController");
 const folderController = require("./controllers/folderController");
+const { exec } = require("child_process");
 const cors = require("cors");
 
 ////////////////////////////////////////////////////////////////////////////// APP SETUP //////////////////////////////////////////////////////////////
@@ -90,8 +91,9 @@ app.delete("/deleteFile", async function (req, res, next) {
 });
 
 app.post("/moveFile", async function (req, res, next) {
+  console.log(req.body)
   let oneFile = await fileController
-    .MoveOneFile(req.body.oldPath, req.body.newPath)
+    .MoveOneFile(req.body.data.oldPath, req.body.data.newPath)
     .then((result) => {
       return result;
     })
@@ -99,6 +101,35 @@ app.post("/moveFile", async function (req, res, next) {
       return error;
     });
   res.json(oneFile);
+});
+
+app.post("/moveFolder", async function (req, res, next) {
+  await folderController
+    .MoveOneFolder(req.body.data.oldPath, req.body.data.newPath)
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((error) => {
+      res.send(error);
+    });
+});
+
+app.post("/bash", async function (req, res, next) {
+  console.log(req.body)
+  exec(req.body.data, (error, stdout, stderr) => {
+    if (error) {
+      console.log(`error: ${error.message}`);
+      res.send(error.message);
+      return;
+    }
+    if (stderr) {
+      console.log(`stderr: ${stderr}`);
+      res.send(stderr);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+    res.send(stdout);
+  });
 });
 
 app.listen(port, () => {

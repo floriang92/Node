@@ -1,9 +1,63 @@
-import React from 'react'
+import React from "react";
+import Modal from "@material-ui/core/Modal";
+import FormMoveFile from "../Form/FormMoveFile";
+import { makeStyles } from "@material-ui/core/styles";
 
-function ModalMove() {
+function ModalMove(props) {
+  function getModalStyle() {
+    const top = 50;
+    const left = 50;
+
+    return {
+      top: `${top}%`,
+      left: `${left}%`,
+      transform: `translate(-${top}%, -${left}%)`,
+    };
+  }
+  const [modalStyle] = React.useState(getModalStyle);
+  const [open, setOpen] = React.useState(true);
+
+  const useStyles = makeStyles((theme) => ({
+    paper: {
+      position: "absolute",
+      width: 400,
+      backgroundColor: "#0D1117",
+      border: "2px solid #fff",
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+      borderRadius: "20px",
+    },
+    "& .MuiTextField-root": {
+      margin: theme.spacing(1),
+      width: "25ch",
+    },
+  }));
+  const classes = useStyles();
+
+  const handleClose = () => {
+    setOpen(false);
+    props.reset(null);
+  };
+
   return (
-    <div>ModalMove</div>
-  )
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="simple-modal-title"
+      aria-describedby="simple-modal-description"
+    >
+      <div style={modalStyle} className={classes.paper}>
+        <h2 id="simple-modal-title" style={{ color: "white" }}>
+          Déplacer un élément
+        </h2>
+        <p id="simple-modal-description">
+          L'emplacement est par défaut à l'endroit où vous vous situez.
+          <strong>Entrez une destination valide !</strong>
+        </p>
+        <FormMoveFile handleClose={handleClose} />
+      </div>
+    </Modal>
+  );
 }
 
-export default ModalMove
+export default ModalMove;

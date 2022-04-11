@@ -4,27 +4,28 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { baseUrl } from "../../Environnement";
-import { Path } from "react-router-dom";
 
-function FormAddFile(props) {
+function FormMoveFile(props) {
   const { pathState } = React.useContext(PathContext);
-  const [addFileHandler, setAddFileHandler] = React.useState({
-    address: pathState.path,
-    name: "test.js",
+  const [moveFileHandler, setMoveFileHandler] = React.useState({
+    oldPath: pathState.path,
+    newPath: "",
   });
   const handleSubmit1 = () => {
     let url;
     let re = /(?:\.([^.]+))?$/;
-    re.exec(addFileHandler.name)[1] ? (url = "/addFile") : (url = "/addFolder");
-    axios
-      .post(baseUrl + url, { data: addFileHandler })
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      });
+    re.exec(moveFileHandler.oldPath)[1] ? (url = "/moveFile") : (url = "/moveFolder");
+    console.log(moveFileHandler)
+    moveFileHandler.newPath !== "" &&
+      axios
+        .post(baseUrl + url, { data: moveFileHandler })
+        .then(function (response) {
+          console.log(response.data);
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
   };
 
   const useStyles = makeStyles((theme) => ({
@@ -42,46 +43,47 @@ function FormAddFile(props) {
         e.preventDefault();
         handleSubmit1();
         props.handleClose();
-        window.location.reload();
+        // window.location.reload();
       }}
     >
       <div className="text-field">
         <TextField
           onChange={(e) => {
-            setAddFileHandler({
-              ...addFileHandler,
-              address: e.target.value,
+            setMoveFileHandler({
+              ...moveFileHandler,
+              oldPath: e.target.value,
             });
           }}
           className="text-field"
           required
           id="outlined-required"
-          label="Emplacement"
+          label="Emplacement de départ"
           variant="outlined"
-          value={addFileHandler.address}
+          value={moveFileHandler.oldPath}
         />
       </div>
       <div className="text-field">
         <TextField
           onChange={(e) => {
-            setAddFileHandler({
-              ...addFileHandler,
-              name: e.target.value,
+            setMoveFileHandler({
+              ...moveFileHandler,
+              newPath: e.target.value,
             });
           }}
           className="text-field"
           required
           id="outlined-required"
-          label="Nom Fichier / Dossier"
-          value={addFileHandler.name}
+          label="Emplacement d'arrivée"
+          value={moveFileHandler.newPath}
           variant="outlined"
+          placeholder="new/path/file.txt"
         />
       </div>
       <button className="button-modal" type="submit">
-        Créer un fichier
+        Valider le déplacement
       </button>
     </form>
   );
 }
 
-export default FormAddFile;
+export default FormMoveFile;

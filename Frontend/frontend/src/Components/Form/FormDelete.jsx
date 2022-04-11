@@ -47,7 +47,6 @@ function FormDelete(props) {
         window.location.reload();
       }}
     >
-
       <button className="button-modal" type="submit">
         Supprimer
       </button>

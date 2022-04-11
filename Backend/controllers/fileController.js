@@ -59,9 +59,8 @@ module.exports = {
     return createFile(data.data.address + "/" + data.data.name);
   },
 
-  MoveOneFile: async (oldPath, newPath) => {
-    let updatedFile = await moveOneFile(oldPath, newPath);
-    return updatedFile;
+  MoveOneFile: (oldPath, newPath) => {
+    return moveOneFile(oldPath, newPath);
   },
 
   DeleteFile: async (data) => {

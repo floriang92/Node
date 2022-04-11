@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
+const fs_extra  = require('fs-extra')
 
 async function getOneFolder(completePath) {
   return fs.readdirSync(completePath, (err, files) => {
@@ -33,7 +34,7 @@ async function createFolder(completePath) {
       return err;
     } else {
       console.log("The folder has been created!");
-      return "File created";
+      return "Folder created";
     }
   });
 }
@@ -66,6 +67,16 @@ async function deleteFolder(completePath) {
   }
 }
 
+async function moveOneFolder(oldpath, newPath) {
+  try {
+    fs_extra.move(oldpath, newPath);
+    return "Folder moved successfully";
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
+}
+
 module.exports = {
   GetOneFolder: async (partialPath) => {
     let temp = await getOneFolder(path.join(__dirname, "../", partialPath));
@@ -78,8 +89,7 @@ module.exports = {
   },
 
   GetAllFolders: async () => {
-    let allFolders = await getAllFolders();
-    return allFolders;
+    return getAllFolders();
   },
 
   AddFolder: async (data) => {
@@ -87,12 +97,14 @@ module.exports = {
   },
 
   UpdateFolder: async (id, data) => {
-    let updatedFolder = await updateFolder(id, data);
-    return updatedFolder;
+    return updateFolder(id, data);
+  },
+
+  MoveOneFolder: (oldPath, newPath) => {
+    return moveOneFolder(oldPath, newPath);
   },
 
   DeleteFolder: async (data) => {
-    console.log(data)
     return deleteFolder(data);
   },
 };
