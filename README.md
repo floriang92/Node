@@ -8,8 +8,6 @@ Ce projet a été realisé par les contributeurs suivants
 - William HERBIN
 - Florian GILLET
 
-## Installation
-
 ## Technologies utilisées
 
 ### Backend
@@ -17,8 +15,6 @@ Ce projet a été realisé par les contributeurs suivants
 Node.js est un environnement bas niveau permettant l’exécution de JavaScript côté serveur.\
 Version du framework utilisée: 17.9.0 
 Plus d'information: [Voir le site Node js](https://nodejs.org/fr/about/)
-
-#### Express js
 
 ### FrontEnd 
 #### React js
@@ -31,6 +27,9 @@ Plus d'information: [Voir le site React js](https://fr.reactjs.org/)
 
 ### Structure Application (App.js)
 #### Les différents fichiers
+- app.js: contient la structure de base du serveur et les différentes routes
+- fileController.js: contient toutes les fonctions de gestion des fichiers
+- folderController.js: contient toutes les fonctions de gestion des dossiers
 #### Les différents modules utilisés
 #### Mise en place du serveur
 #### Déclaration des routes
@@ -185,22 +184,80 @@ async function moveOneFile(oldpath, newPath) {
 
 #### Route /folderDetail
 ##### Présentation
+Cette route de type 'POST'  permet de lister les éléments présent dans un dossier.
 ##### Code
 ##### Demonstration
 
 #### Route /addFolder
 ##### Présentation
+Cette route de type 'POST'  permet de créer un nouveau dossier.
 ##### Code
 ##### Demonstration
 
 #### Route /deleteFolder
 ##### Présentation
+Cette route de type 'Delete' permet de supprimer un dossier.
 ##### Code
+Dans App.js:
+Nous faissons appel à la fonction 'deleteFile' de 'folderController'. Le chemin du dossier à supprimer est en arguments.
+Nous attendons le résultat de cette fonction, puis nous envoyons une réponse au format JSON. 
+```
+app.delete("/deleteFile", async function (req, res) {
+  await fileController
+    .DeleteFile(req.body.path)
+    .then(() => {
+      res.status(200).send("Deletion OK");
+    })
+    .catch((error) => {
+      res.status(400).send(error);
+    });
+});
+```
+Dans folderController.js:
+La fonction 'rmSync' permet de supprimer un dossier.
+```
+async function deleteFolder(completePath) {
+  try {
+    fs.rmSync(completePath, { recursive: true, force: true });
+  } catch (err) {
+    console.error(err);
+  }
+}
+```
 ##### Demonstration
 
 #### Route /moveFolder
 ##### Présentation
+Cette route de type 'Post' permet de déplacer un dossier vers un autre dossier.
 ##### Code
+Dans App.js:
+Nous faissons appel à la fonction 'MoveOneFolder' de 'folderController'. Arguments sont requis, le chemin actuel et le nouveau chemin.
+Nous attendons le résultat de cette fonction, puis nous envoyons une réponse au format JSON. 
+```
+app.post("/moveFolder", async function (req, res) {
+  await folderController
+    .MoveOneFolder(req.body.data.oldPath, req.body.data.newPath)
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((error) => {
+      res.send(error);
+    });
+});
+```
+Dans folderController.js:
+La fonction 'move' permet de déplacer un dossier vers un autre.
+```
+async function moveOneFolder(oldpath, newPath) {
+  try {
+    fs_extra.move(oldpath, newPath);
+    return "Folder moved successfully";
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
+}
+```
 ##### Demonstration
 
 ### Bash
