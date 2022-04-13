@@ -30,9 +30,6 @@ Plus d'information: [Voir le site React js](https://fr.reactjs.org/)
 - app.js: contient la structure de base du serveur et les différentes routes
 - fileController.js: contient toutes les fonctions de gestion des fichiers
 - folderController.js: contient toutes les fonctions de gestion des dossiers
-#### Les différents modules utilisés
-#### Mise en place du serveur
-#### Déclaration des routes
 
 ### Fichiers
 
@@ -192,6 +189,33 @@ Cette route de type 'POST'  permet de lister les éléments présent dans un dos
 ##### Présentation
 Cette route de type 'POST'  permet de créer un nouveau dossier.
 ##### Code
+Dans App.js:
+Nous faissons appel à la fonction 'deleteFile' de 'folderController'. Le chemin du dossier à supprimer est en arguments.
+Nous attendons le résultat de cette fonction, puis nous envoyons une réponse au format JSON. 
+```
+app.delete("/deleteFile", async function (req, res) {
+  await fileController
+    .DeleteFile(req.body.path)
+    .then(() => {
+      res.status(200).send("Deletion OK");
+    })
+    .catch((error) => {
+      res.status(400).send(error);
+    });
+});
+```
+Dans folderController.js:
+La fonction 'rmSync' permet de supprimer un dossier.
+```
+async function deleteFolder(completePath) {
+  try {
+    fs.rmSync(completePath, { recursive: true, force: true });
+  } catch (err) {
+    console.error(err);
+  }
+}
+```
+
 ##### Demonstration
 
 #### Route /deleteFolder
@@ -264,5 +288,29 @@ async function moveOneFolder(oldpath, newPath) {
 
 #### Route /bash
 ##### Présentation
+Cette route de type 'Post' permet d'executer des commandes bash windows.
 ##### Code
+Pour executer des commandes windows bash, il suffit d'utiliser la fonction 'exec'.\
+La fonction 'exec' renvoie trois elements:
+- error: en cas d'erreur
+- stdout: le résultat de la commande
+- stderr: si la commande retourne un autre code que 0
+```
+app.post("/bash", async function (req, res) {
+  exec(req.body.data, (error, stdout, stderr) => {
+    if (error) {
+      console.log(`error: ${error.message}`);
+      res.send(error.message);
+      return;
+    }
+    if (stderr) {
+      console.log(`stderr: ${stderr}`);
+      res.send(stderr);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+    res.send(stdout);
+  });
+});
+```
 ##### Demonstration
